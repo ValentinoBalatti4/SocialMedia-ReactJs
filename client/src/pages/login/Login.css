@@ -1,0 +1,67 @@
+.container{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginWrapper{
+    width: 80%; 
+    max-width: 580px;
+    padding: 10px 20px;
+    border: solid 1px #19A7CE;
+    border-radius: 10px;
+    box-shadow: 3px 4px 2px rgba(0, 0, 0, 0.3);
+}
+
+.loginWrapper h2{
+    font-size: 32px;
+    color: #19A7CE;
+    margin-bottom: 15px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.field label{
+    font-size: 20px;
+}
+
+.field input{
+    font-size: 18px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid lightgray;
+    transition: all 0.2s ease-in-out;
+}
+
+.field input:focus{
+    border-bottom: 1px solid #19A7CE;
+    box-shadow: 0 1px 1px 0 #19a7ce38;
+}
+
+button{
+    width: 100px;
+    background-color: #AFD3E2;
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+}
+
+button:hover{
+    background-color: #afd3e2ae;
+}
