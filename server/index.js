@@ -1,7 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const { default: mongoose } = require('mongoose')
 require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
@@ -9,6 +8,7 @@ const postRoutes = require('./routes/posts')
 
 const app = express()
 
+app.use(express.json())
 app.use(cors())
 
 //Connect to DB
@@ -26,5 +26,5 @@ app.use("/posts", postRoutes)
 
 //Initialize server
 app.listen(process.env.PORT, () => {
-    console.log('[+] Listening on port ' + process.env.PORT)
+    console.log('[+] Listening on http://localhost:' + process.env.PORT)
 })

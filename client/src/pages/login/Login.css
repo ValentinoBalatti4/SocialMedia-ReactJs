@@ -6,7 +6,7 @@
     align-items: center;
 }
 
-.loginWrapper{
+.Wrapper{
     width: 80%; 
     max-width: 580px;
     padding: 10px 20px;
@@ -15,16 +15,38 @@
     box-shadow: 3px 4px 2px rgba(0, 0, 0, 0.3);
 }
 
-.loginWrapper h2{
+.Wrapper h2{
     font-size: 32px;
     color: #19A7CE;
     margin-bottom: 15px;
+}
+
+.Wrapper b{
+    font-weight: 400;
+    color: #19A7CE;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.Wrapper b::after{
+    background: #19A7CE;
+    content: "";
+    width: 0px;
+    height: 1px;
+    display: block;
+    transition: 300ms;
+}
+
+
+.Wrapper b:hover::after{ 
+    width: 100%;
 }
 
 form{
     display: flex;
     flex-direction: column;
     gap: 18px;
+    margin-bottom: 12px;
 }
 
 .field{
@@ -35,19 +57,27 @@ form{
 
 .field label{
     font-size: 20px;
+    transition: all 0.3s ease-in-out;
 }
 
-.field input{
+.field input {
     font-size: 18px;
     outline: none;
     border: none;
     border-bottom: 1px solid lightgray;
-    transition: all 0.2s ease-in-out;
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+  
+.field input:focus {
+    border-bottom: 2px solid #19A7CE;
+    box-shadow: 0px 2px 3px 0px #19a7ce38;
 }
 
-.field input:focus{
-    border-bottom: 1px solid #19A7CE;
-    box-shadow: 0 1px 1px 0 #19a7ce38;
+.field:focus-within label,
+.field input:focus + label{
+    color: #19A7CE;
+    text-shadow: 3px 4px 3px #19a7ce38;;
 }
 
 button{
@@ -65,3 +95,4 @@ button{
 button:hover{
     background-color: #afd3e2ae;
 }
+

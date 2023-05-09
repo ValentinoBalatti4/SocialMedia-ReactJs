@@ -5,12 +5,10 @@ const userSchema = mongoose.Schema({
         type: String,
         unique: true,
         min: 4,
-        required
     },
     password: {
         type: String,
         min: 4,
-        required
     },
     profilePic: String,
     followers: Array,
