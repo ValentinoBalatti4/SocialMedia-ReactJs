@@ -1,10 +1,13 @@
 nav{
-    position: fixed;
-    height: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 60px;
     width: 100vw;
     top: 0;
     background: #19A7CE;
     box-shadow: 1px 1px 2px 2px rgb(42, 42, 42, 0.5);
+    position: fixed;
     z-index: 100;
 }
 
@@ -12,14 +15,16 @@ nav{
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 5px 20px;
+    padding: 10px 20px;
 }
 
 .logo-container{
     flex: 1
 }
 
-.logo-container h2{
+.logo-container a{
+    text-decoration: none;
+    font-weight: 600;
     font-size: 33px;
     cursor: pointer;
     text-align: center;
@@ -62,4 +67,38 @@ nav{
 
 .options-container{
     flex: 1;
+}
+
+.results{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    gap: 10px;
+    background-color: #19a7cecf;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.result{
+    width: 100%;
+    background-color: #F6F1F1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.result:hover{
+    background-color: #F6F6F6;
+}
+
+.result img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }

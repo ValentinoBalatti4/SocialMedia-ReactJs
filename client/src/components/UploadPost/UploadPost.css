@@ -1,0 +1,55 @@
+
+.upload-post{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f6f1f1;
+    gap: 10px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.upload-post textarea{
+    font-size: 17px;
+    width: 100%;
+    resize: vertical;
+    min-height: 40px;
+    border-radius: 15px;
+    outline: none;
+    border: none;
+    padding: 7px;
+    word-wrap: break-word;
+}
+
+.upload-post:focus-within{
+    box-shadow: 1px 1px 4px 1px gray;
+}
+
+.upload-options{
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.upload-options .submit-btn{
+    font-size: 16px;
+    background-color: #AFD3E2;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.upload-options-extra{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-options-extra span{
+    cursor: pointer;
+}

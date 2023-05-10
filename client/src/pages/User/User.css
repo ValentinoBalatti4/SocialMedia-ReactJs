@@ -1,0 +1,48 @@
+.user-wrapper{
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-banner{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #AFD3E2;
+    padding: 15px 30px;
+    margin-bottom: 20px;
+}
+
+.banner-user-info{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-banner h1{
+    font-size: 44px;
+    text-shadow: 2px 4px 3px gray;
+}
+
+.user-banner img{
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-contacts{
+    font-size: 28px;
+    display: flex;
+    gap: 20px;
+}
+
+.user-posts{
+    display: flex;
+    justify-content: center;
+}
+
+.user-posts{
+    margin-bottom: 20px;
+}
