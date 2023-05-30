@@ -1,17 +1,35 @@
 const router = require('express').Router()
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const Post = require('../models/Post')
 const verifyJWT = require('../middleware/verifyJWT')
-const { json } = require('body-parser')
+const { getStorage, ref, uploadBytes, getDownloadURL } = require('firebase/storage')
+const { initializeApp } = require('firebase/app')
+const config = require('../config/firebase.config.js')
+const multer = require('multer')
+
+initializeApp(config)
+const storage = getStorage()
+
+const upload = multer({ storage: multer.memoryStorage() })
 
 
-
-router.post('/upload', verifyJWT, async (req, res) => {
+router.post('/upload', verifyJWT, upload.single('image'), async (req, res) => {
     try{
+        const file = req.file
+
+        let imageUrl = ""
+
+        if(file){
+            const timestamp = Date.now().toString()
+            const fileUpload = ref(storage,  file.originalname + '_' + timestamp);
+            const snapshot = await uploadBytes(fileUpload, file.buffer);
+
+            imageUrl = await getDownloadURL(snapshot.ref)
+        }
+
         const post = new Post({
             username: req.user,
             text: req.body.text,
+            img: imageUrl
         })
 
         await post.save()
@@ -23,6 +41,15 @@ router.post('/upload', verifyJWT, async (req, res) => {
     }
 })
 
+router.post('/remove', verifyJWT, async (req, res) => {
+    try{
+
+    }catch(e){
+        
+    }
+})
+
+
 router.get('/', async (req, res) => {
     try{
         const posts = await Post.find().sort({createdAt: -1})
@@ -32,6 +59,5 @@ router.get('/', async (req, res) => {
         res.status(404).json({ message: "Posts not found"})
     }
 })
-
 
 module.exports = router
