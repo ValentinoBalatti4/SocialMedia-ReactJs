@@ -14,8 +14,11 @@ const UploadPost = () => {
     if(postText !== ""){
       
       try{
-        const res = await axios.post('http://localhost:4444/upload')
-        console.log(res.data)
+        const res = await axios.post('http://localhost:4444/posts/upload', {text: postText} ,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        })
       }catch (e){
         setError(e.message)
         console.log(e)
