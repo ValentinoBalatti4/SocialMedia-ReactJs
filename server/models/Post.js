@@ -6,21 +6,24 @@ const postSchema = mongoose.Schema({
         required: true,
         unique: false
     },
-    caption: {
+    text: {
         type: String,
         max: 500
     },
     img: {
         type: String,
-        default: ''
+        default: '',
+        required: false
     },
     likes: {
         type: Array,
-        default: []
+        default: [],
+        required: false
     },
     comments: {
         type: Array,
-        default: []
+        default: [],
+        required: false
     }
 }, { timestamps: true })
 

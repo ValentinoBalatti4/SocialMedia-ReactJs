@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_KEY)
 
 // Routes
 app.use("/auth", authRoutes)
-app.use("/posts", postRoutes)
+app.use("/", postRoutes)
 
 //Initialize server
 app.listen(process.env.PORT, () => {

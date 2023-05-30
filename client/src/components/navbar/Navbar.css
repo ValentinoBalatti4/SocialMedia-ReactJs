@@ -32,6 +32,10 @@ nav{
     text-shadow: 1px 2px 1px #000000;
 }
 
+.search-container-btn{
+    display: none;
+}
+
 
 .search-container{
     flex: 4;
@@ -65,8 +69,22 @@ nav{
     font-variation-settings: 'opsz' 1
 }
 
+.options-hamburger-btn{
+    display: none;
+    color: #F6F1F1;
+}
+
 .options-container{
     flex: 1;
+    display: flex;
+    gap: 20px;
+    font-size: 1.2rem;
+    color: #F6F1F1;
+
+}
+
+.options-container a{
+    cursor: pointer;
 }
 
 .results{
@@ -101,4 +119,87 @@ nav{
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+
+@media screen and (max-width: 782px){
+    .options-container{
+        display: none
+    }   
+
+    .options-hamburger-btn{
+        display: flex;
+    }
+
+    .options-hamburger-btn:active ~ .options-container{
+        position: absolute;
+        left: 80%;
+        top: 60px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background-color: #F6F1F1;
+        color: #000000;
+        padding: 10px;
+        border: 1px solid lightgrey;
+        font-size: 15px;
+    }
+
+    .options-container div{
+        border-bottom: 1px solid lightgrey;
+    }
+
+}
+
+@media screen and (max-width: 600px){
+    .results{
+        width: 60%;
+    }
+}   
+
+@media screen and (max-width: 480px){
+    nav{
+        height: 45px;
+    }
+
+    .logo-container a{
+        font-size: 22px;
+    }
+
+    .options-hamburger-btn:active ~ .options-container{
+        top: 45px;
+    }
+
+    .search-container{
+        display: none;
+    }
+    .search-container input{
+        font-size: 14px;
+    }
+
+    .search-container-btn{
+        display: flex;
+        color: #F6F1F1;
+        margin-right: 10px;
+    }
+
+
+    .search-container-btn:active ~ .search-container,
+    .search-container-btn:focus ~ .search-container {
+        display: flex;
+        animation-name: searchBar;
+        animation-duration: 2s;
+    }
+
+    .search-container-btn:active ~ .logo-container a,
+    .search-container-btn:focus ~ .logo-container a {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    @keyframes searchBar {
+        0% {width: 0;}
+        66% {width: 50%;}
+        100% {width: 100%}
+    }
 }

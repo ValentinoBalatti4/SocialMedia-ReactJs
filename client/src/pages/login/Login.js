@@ -10,7 +10,7 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [password2, setPassword2] = useState("")
-  const [userData, setUserData] = useState("")
+  const [userData, setUserData] = useState({ })
   const [error, setError] = useState("")
 
   const navigate = useNavigate()
@@ -24,11 +24,11 @@ const Login = () => {
         const registerUser = {username, password}
         const res = await axios.post("http://localhost:4444/auth/register", registerUser)
         setUserData({
-          token: res.data.token,
+          token: res.data.accessToken,
           user: res.data.user
         })
-        localStorage.setItem("token", res.data.token)
-        navigate('/')
+        localStorage.setItem("token", res.data.accessToken)
+        navigate('/login')
       } catch(e){
         setError(e.message)
       }
@@ -40,16 +40,25 @@ const Login = () => {
     try{
       const loginUser = {username, password}
       const res = await axios.post("http://localhost:4444/auth/login", loginUser)
-      setUserData({
-        token: res.data.token,
-        user: res.data.user
-      })
-      localStorage.setItem("token", userData.token)
-      navigate("/")
+      if(res.data.accessToken !== undefined){
+        console.log(res.data.accessToken)
+        setUserData({
+          token: res.data.accessToken,
+          user: res.data.user
+        })
+        localStorage.setItem("token", userData.accessToken)
+        navigate("/")
+      }
     }catch(e){
-      setError(e.message)
+      if (!e.response.data.message) {
+        setError(e.response.data.message);
+      } else {
+        setError(e);
+      }
     }
   }
+
+
 
   return (
       <div className="container">
@@ -66,7 +75,7 @@ const Login = () => {
                   <input minLength="4" type='password' value={password} onChange={e => setPassword(e.target.value)}/>
                 </div>
 
-                <button type="submit">Login</button>
+                <button type="submit" disabled={!username || !password}>Login</button>
                 {error && <Error message={error} clearError={() => setError(undefined)} />}
               </form>
               <p>You don't have an account? <b onClick={() => setWrapper(false)}>Click to register</b></p>
@@ -87,7 +96,7 @@ const Login = () => {
                   <label>Confirm password</label>
                   <input minLength="4" type='password' value={password2} onChange={e => setPassword2(e.target.value)}/>
                 </div>
-                <button type='submit'>Register</button>
+                <button type='submit' disabled={!username || !password}>Register</button>
                 {error && <Error message={error} clearError={() => setError(undefined)} />}
               </form>
               <p>Already have an account? <b onClick={() => setWrapper(true)}>Click to login</b></p>
