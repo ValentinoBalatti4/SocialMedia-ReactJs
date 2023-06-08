@@ -5,6 +5,7 @@ require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
+const verify = require('./middleware/verifyJWT')
 
 const app = express()
 

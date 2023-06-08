@@ -8,13 +8,31 @@ import axios from 'axios'
 
 const Home = () => {
   const [posts, setPosts] = useState([])
+  const [isLoggedIn, setIsLoggedIn] = useState(0)
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const accessToken = localStorage.getItem('token')
+      if(accessToken){
+        try{
+          const BASE_URL = 'http://localhost:4444'
+          const res = await axios.get(`${BASE_URL}/auth/verify`, {
+            headers: { 'Authorization': 'Bearer ' + accessToken}
+          })
+          setIsLoggedIn(1)
+        } catch{}
+      }
+    }
+    checkLoginStatus()
+  }, [])
+
+
 
   useEffect(() => {
     const getPosts = async () => {
       try{
         const BASE_URL = "http://localhost:4444"
         const res = await axios.get(`${BASE_URL}/posts/`)
-        console.log(res)
         setPosts(res.data.posts)
 
       } catch(e){
@@ -27,11 +45,13 @@ const Home = () => {
 
   return (
     <div className='container'>
-        <Navbar/>
+        <Navbar isLogged={isLoggedIn}/>
         <div className='home-wrapper'>
           <Sidebar/>
           <div className='center'>
-            <UploadPost/>
+            {
+              isLoggedIn && <UploadPost/>
+            }
             {
               posts.map(post => (
                 <Post post={post}/>

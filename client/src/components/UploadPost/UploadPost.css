@@ -53,3 +53,8 @@
 .upload-options-extra span{
     cursor: pointer;
 }
+
+.EmojiPickerReact{
+    position: relative;
+    --epr-bg-color: black;
+}

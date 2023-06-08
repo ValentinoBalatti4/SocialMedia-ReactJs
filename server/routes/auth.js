@@ -3,7 +3,7 @@ const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
-
+const verifyJWT = require('../middleware/verifyJWT')
 
 router.post('/register', async (req, res) => {
     try{
@@ -107,6 +107,10 @@ router.get('/refresh', (req, res, next) => {
     }
 })
 
+router.get('/verify', verifyJWT, (req, res) => {
+    res.sendStatus(200); // Return a success status if the token is valid
+});
+
 router.post('/logout', (req, res) => {
     try{
         const cookies = req.cookies
@@ -120,7 +124,7 @@ router.post('/logout', (req, res) => {
         res.json({message: 'Loged out!'})       
 
     } catch(e){
-        console.log(e)
+        console.log(e.message)
     }
 
 })

@@ -3,10 +3,11 @@ import Error from '../Error/Error'
 import "./UploadPost.css"
 import axios from 'axios'
 
+
 const UploadPost = () => {
   const [postText, setPostText] = useState("")
   const [image, setImage] = useState("")
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(0)
   const [error, setError] = useState("")
 
   const selectImage = (e) => {
@@ -39,7 +40,6 @@ const UploadPost = () => {
   }
 
 
-
   return (
     <form className='upload-post'  onSubmit={uploadPost}>
         <textarea placeholder="Share what you 're thinking..." value={postText} onChange={e => setPostText(e.target.value)}/>
@@ -50,7 +50,7 @@ const UploadPost = () => {
             { error && <Error message={error} clearError={() => setError(undefined)}/> }
             <div className='upload-options-extra'>
                 <div>
-                  <label htmlFor="image-input">
+                  <label htmlFor="image-input" >
                     <span className="material-symbols-outlined">image</span>
                   </label>
                   <input
@@ -58,9 +58,13 @@ const UploadPost = () => {
                     type='file'
                     accept='image/*'
                     onChange={selectImage}
+                    style={{display: 'none'}}
                   />
                 </div>
-                <div><span className="material-symbols-outlined">mood</span></div>
+                <div>
+                  <span className="material-symbols-outlined">mood</span>
+                </div>
+
             </div>
         </div>
     </form>

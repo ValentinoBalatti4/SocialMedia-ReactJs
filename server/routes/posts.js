@@ -43,9 +43,9 @@ router.post('/upload', verifyJWT, upload.single('image'), async (req, res) => {
 
 router.post('/remove', verifyJWT, async (req, res) => {
     try{
-
-    }catch(e){
         
+    }catch(e){
+
     }
 })
 

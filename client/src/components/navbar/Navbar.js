@@ -3,21 +3,20 @@ import "./Navbar.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Navbar = () => {
+const Navbar = (isLogged) => {
     const [input, setInput] = useState("")
-
+    console.log(isLogged)
     const navigate = useNavigate()
    
-    const handleLogout = (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault()
         try{
-            const res = axios.get('http://localhost:4444/auth/logout')
+            const res = await axios.get('http://localhost:4444/auth/logout')
             console.log(res.data)
             navigate('/login')
         } catch(e){
             console.log(e)
         }
-
     }
 
   return (
@@ -41,7 +40,14 @@ const Navbar = () => {
                     <a>Lorem ipsum</a>
                 </div>
                 <div>
-                    <a onClick={e => handleLogout}>Log out</a>
+                    {
+                        isLogged
+                        ?
+                            <a onClick={(e) => handleLogout(e)}>Log out</a>
+                        : 
+                            <a href='/login'>Log in</a>
+
+                    }
                 </div>
             </div>
         </div>
