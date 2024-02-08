@@ -3,8 +3,6 @@ import "./User.css"
 import Navbar from '../../components/navbar/Navbar'
 import Post from '../../components/posts/Post'
 
-
-
 const User = () => {
   return (
     <div className="user-container">

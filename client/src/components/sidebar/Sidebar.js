@@ -4,6 +4,7 @@ import "./Sidebar.css"
 const Sidebar = () => {
   return (
     <aside className='aside-container'>
+        <p>Friends</p>
         <div className='item'>
             <div className='userinfo'>
                 <img src='https://picsum.photos/200/300'/>

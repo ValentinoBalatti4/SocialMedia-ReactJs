@@ -1,16 +1,17 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')   
 require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
-const verify = require('./middleware/verifyJWT')
 
 const app = express()
 
+app.use(cors({origin: 'http://localhost:3000', credentials: true, methods: ['GET', 'POST']}))
+app.use(cookieParser())
 app.use(express.json())
-app.use(cors())
 
 //Connect to DB
 mongoose.connect(process.env.MONGO_KEY)

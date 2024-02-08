@@ -3,21 +3,15 @@ import "./Navbar.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Navbar = (isLogged) => {
+const Navbar = ({ isLogged, removeCookie }) => {
     const [input, setInput] = useState("")
     console.log(isLogged)
     const navigate = useNavigate()
    
-    const handleLogout = async (e) => {
-        e.preventDefault()
-        try{
-            const res = await axios.get('http://localhost:4444/auth/logout')
-            console.log(res.data)
-            navigate('/login')
-        } catch(e){
-            console.log(e)
-        }
-    }
+    const logout = () => {
+        removeCookie("token");
+        navigate("/login");
+      };
 
   return (
     <nav>
@@ -33,7 +27,7 @@ const Navbar = (isLogged) => {
                 <span className="material-symbols-outlined">search</span>
             </div>
             <div className='options-hamburger-btn'>
-                <span class="material-symbols-outlined">menu</span>
+                <span className="material-symbols-outlined">menu</span>
             </div>
             <div className='options-container'>
                 <div>
@@ -41,12 +35,7 @@ const Navbar = (isLogged) => {
                 </div>
                 <div>
                     {
-                        isLogged
-                        ?
-                            <a onClick={(e) => handleLogout(e)}>Log out</a>
-                        : 
-                            <a href='/login'>Log in</a>
-
+                        isLogged ? <a onClick={(e) => logout()}>Log out</a> : <a href='/login'>Log in</a>
                     }
                 </div>
             </div>
