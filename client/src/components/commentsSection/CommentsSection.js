@@ -28,7 +28,12 @@ function CommentsSection({ comments, setComments, postId, getTimeElapsed }) {
           {
             comments.length ===  0 ? <p>There are no comments yet...</p> : (
               comments.map((comment, index) => (
-                <Comment comment={comment} getTimeElapsed={getTimeElapsed} key={index}/>
+                <Comment 
+                  postId={postId}
+                  comment={comment}
+                  setComments={setComments}
+                  getTimeElapsed={getTimeElapsed} 
+                  key={index}/>
               ))
             )
           }

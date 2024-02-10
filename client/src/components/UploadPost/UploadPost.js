@@ -2,17 +2,14 @@ import React, { useState } from 'react'
 import Error from '../Error/Error'
 import "./UploadPost.css"
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
-const UploadPost = () => {
+const UploadPost = ({ setPosts }) => {
   const [postText, setPostText] = useState("")
   const [image, setImage] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(0)
   const [error, setError] = useState("")
 
   const [imageUrl, setImageUrl] = useState(''); // State for image preview URL
-
-  const navigate = useNavigate()
 
   const selectImage = (e) => {
     setImage(e.target.files[0])
@@ -30,15 +27,17 @@ const UploadPost = () => {
         formData.append('text', postText)
         formData.append('image', image)
         const res = await axios.post('http://localhost:4444/posts/upload', formData, {withCredentials: true})
-        setPostText("")
-        setImage("")
-        window.location.reload()
+
+        setPostText("");
+        setImage("");
+
+        setPosts((prevPosts) => [res.data.newPost, ...prevPosts]);
       }catch (e){
-        setError(e.message)
-        console.log(e)
+        setError(e.message);
+        console.log(e);
       }
     } else{
-      setError("Input something...")
+      setError("Input something...");
     }
   }
 

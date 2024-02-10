@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './Comment.css'
 import axios from 'axios';
 
-function Comment({ comment, getTimeElapsed }) {
+function Comment({ postId, comment, setComments, getTimeElapsed }) {
     const [commentOwnerProfilePic, setCommentOwnerProfilePic] = useState("")
 
     useEffect(() => {
@@ -20,7 +20,13 @@ function Comment({ comment, getTimeElapsed }) {
 
     const handleDeleteButton = async () => {
         try{
-            const res = await axios.post(`http://localhost:4444/posts/deleteComment/${comment.id}`, {}, {withCredentials: true});
+            const res = await axios.post(`http://localhost:4444/posts/deleteComment/${postId}/${comment.id}`, {}, {withCredentials: true});
+
+            if(res.status === 200){
+                const updatedComments = res.data.comments;
+                setComments((prevComments) => prevComments.filter((c) => c.id !== comment.id))
+            }
+
 
         }catch(error){
             console.log(error);
@@ -43,7 +49,7 @@ function Comment({ comment, getTimeElapsed }) {
             </div>
         </div>
         <div className='comment-body'>
-            <p>{comment.commentText}</p>
+            <p>{comment.text}</p>
         </div>
   </div>
   )

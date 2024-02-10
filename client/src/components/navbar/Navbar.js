@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Navbar.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 
 const Navbar = ({ isLogged, removeCookie, currentUser }) => {
-    const [input, setInput] = useState("")
-    console.log(isLogged)
-    const navigate = useNavigate()
+    const [input, setInput] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
    
+    useEffect(() => {
+        const fetchSearchResults = async () => {
+            try{
+                if(input.trim() !== ""){
+                    const res = await axios.get(`http://localhost:4444/users/search?query=${input}`);
+                    setSearchResults(res.data.users);
+                }else{
+                    setSearchResults([]);
+                }
+            }catch(error){
+                console.log(error);
+            }
+        }
+        fetchSearchResults();
+    }, [input]);
+
     const logout = () => {
         removeCookie("token");
         navigate("/login");
@@ -48,14 +64,14 @@ const Navbar = ({ isLogged, removeCookie, currentUser }) => {
         {
             input !== "" && (
                 <div className="results">
-                    <div className="result">
-                        <img src="https://picsum.photos/200/300"/>
-                        <a href='search'>Jhon doe</a>
-                    </div>
-                                        <div className="result">
-                        <img src="https://picsum.photos/200/300"/>
-                        <a href='search'>Jhon doe</a>
-                    </div>
+                    {
+                        searchResults.map((result) => (
+                            <div className="result" key={result._id}>
+                                <img src={result.profilePic} />
+                                <a href={`/${result.username}`}>{result.username}</a>
+                          </div>
+                        ))
+                    }
                 </div>
             )
         }

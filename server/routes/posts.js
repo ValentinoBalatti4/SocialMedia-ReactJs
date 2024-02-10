@@ -30,7 +30,7 @@ router.post('/upload', tokenManagment.userLogged, upload.single('image'), async 
             img: imageUrl
         })
         await post.save()
-        res.status(200).json({message: 'Post uploaded succesfully!'})
+        res.status(200).json({message: 'Post uploaded succesfully!', newPost: post })
     } catch(e){
         res.status(500).json({message: "An error has ocurred!", error: e.message})
         console.log(e)
@@ -96,8 +96,8 @@ router.post('/comment/:postId', tokenManagment.userLogged, async (req, res) => {
 
         const newComment = {
             username: user,
-            commentText: commentText,
-            commentId: uuidv4(),
+            text: commentText,
+            id: uuidv4(),
             createdAt: new Date().toISOString()
         }
 
@@ -111,16 +111,20 @@ router.post('/comment/:postId', tokenManagment.userLogged, async (req, res) => {
     }
 })
 
-router.post('/deleteComment/:postId/:commentId', async (req, res) => {
+router.post('/deleteComment/:postId/:commentId', tokenManagment.userLogged, async (req, res) => {
+    const postId = req.params.postId;
     const  commentId = req.params.commentId;
     try{
         const post = await Post.findById(postId); 
-
         if(!post) return res.status(404).json({ message: 'Post not found'});
 
+        const commentIndex = post.comments.findIndex(comment => comment.id === commentId);
+        if(commentIndex === -1) return res.status(404).json({ message: 'Comment not found'});
+        if(post.comments[commentIndex].username !== req.user.username) return res.status(403).json({ message: 'Unauthorized to delete this comment' });
 
-
-        
+        post.comments.splice(commentIndex, 1);
+        await post.save();
+        res.status(200).json({ message: 'Comment deleted successfully', comments: post.comments });
     }catch(error){
         console.log(error);
         res.status(500).json({message: 'Internal Server Error'});

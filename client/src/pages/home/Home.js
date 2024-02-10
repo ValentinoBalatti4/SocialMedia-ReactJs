@@ -117,7 +117,7 @@ const Home = () => {
           <Sidebar/>
           <div className='center'>
             {
-              isLoggedIn && <UploadPost/>
+              isLoggedIn && <UploadPost setPosts={setPosts}/>
             }
             {
               (showPostsComments) ? <CommentsSection comments={selectedPostComments} setComments={setSelectedPostComments} postId={selectedPost._id} getTimeElapsed={getTimeElapsed}/> : (

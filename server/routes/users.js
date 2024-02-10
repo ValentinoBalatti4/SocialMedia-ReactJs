@@ -5,6 +5,18 @@ const Post = require('../models/Post')
 const User = require('../models/User')
 const multer = require("multer")
 
+router.get('/search', async (req, res) => {
+    try{
+        const { query } = req.query;
+        const users = await User.find({ username: { $regex: new RegExp(query, 'i') } })
+
+        res.status(200).json({ users });
+    } catch(error){
+        console.log(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+})
+
 router.get('/:username', async (req, res) => {
         const username = req.params.username;
     try{
@@ -28,5 +40,6 @@ router.get('/:username', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 })
+
 
 module.exports = router

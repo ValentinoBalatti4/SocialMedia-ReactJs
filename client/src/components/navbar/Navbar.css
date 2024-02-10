@@ -130,7 +130,7 @@ nav{
 }
 
 .result:hover{
-    background-color: #F6F6F6;
+    background-color: #ffffff;
 }
 
 .result img{
@@ -140,6 +140,10 @@ nav{
     object-fit: cover;
 }
 
+.result a{
+    color: #000000;
+    text-decoration: none;
+}
 
 @media screen and (max-width: 782px){
     .options-container{

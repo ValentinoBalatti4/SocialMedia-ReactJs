@@ -32,10 +32,9 @@ const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) =>
   }
 
   const handleDeleteButton = async () => {
-    console.log(post._id)
     try{
       const res = await axios.post(`http://localhost:4444/posts/delete/${post._id}`, {}, {withCredentials: true});
-
+      console.log(res)
       setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
     }catch(e){
       console.log(e)
