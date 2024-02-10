@@ -89,7 +89,6 @@ const Home = () => {
       const commentsSection = document.querySelector(".commentsSection-container");
 
       if (commentsSection && !commentsSection.contains(event.target)) {
-        // Clicked outside the CommentsSection
         setShowPostsComments(false);
         setSelectedPost(null);
       }
@@ -98,11 +97,10 @@ const Home = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleOutsideClick);
-
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [showPostsComments]);
+  }, [showPostsComments, handleOutsideClick]);
 
   const showComments = async (post) => {
       setSelectedPost(post);
