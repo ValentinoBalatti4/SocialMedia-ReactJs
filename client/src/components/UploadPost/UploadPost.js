@@ -6,7 +6,6 @@ import axios from 'axios'
 const UploadPost = ({ setPosts }) => {
   const [postText, setPostText] = useState("")
   const [image, setImage] = useState("")
-  const [showEmojiPicker, setShowEmojiPicker] = useState(0)
   const [error, setError] = useState("")
 
   const [imageUrl, setImageUrl] = useState(''); // State for image preview URL

@@ -95,12 +95,12 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [showPostsComments, handleOutsideClick]);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleOutsideClick);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, [showPostsComments, handleOutsideClick]);
 
   const showComments = async (post) => {
       setSelectedPost(post);
@@ -118,7 +118,16 @@ const Home = () => {
               isLoggedIn && <UploadPost setPosts={setPosts}/>
             }
             {
-              (showPostsComments) ? <CommentsSection comments={selectedPostComments} setComments={setSelectedPostComments} postId={selectedPost._id} getTimeElapsed={getTimeElapsed}/> : (
+              (showPostsComments) ? 
+                <CommentsSection
+                  comments={selectedPostComments}
+                  setComments={setSelectedPostComments}
+                  setShowPostsComments={setShowPostsComments}
+                  postId={selectedPost._id}
+                  getTimeElapsed={getTimeElapsed}
+                  currentUser={username}
+                /> 
+              : (
                 posts.map((post, index) => (
                   <Post 
                     post={post}

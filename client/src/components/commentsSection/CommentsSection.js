@@ -1,10 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './CommentsSection.css'
 import axios from 'axios';
 import Comment from '../comment/Comment';
 
-function CommentsSection({ comments, setComments, postId, getTimeElapsed }) {
+const CommentsSection = ({ 
+    comments, 
+    setComments,
+    setShowPostsComments,
+    postId,
+    getTimeElapsed,
+    currentUser 
+  }) => {
+
+  const commentsSectionRef = useRef(null);
   const [commentText, setCommentText] = useState("")
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (commentsSectionRef.current && !commentsSectionRef.current.contains(event.target)) {
+        setShowPostsComments(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [setShowPostsComments]);
 
   const handleUploadComment = async () => {
     try{
@@ -22,7 +44,7 @@ function CommentsSection({ comments, setComments, postId, getTimeElapsed }) {
   }
 
   return (
-    <div className='commentsSection-container'>
+    <div className='commentsSection-container' ref={commentsSectionRef}>
         <h2>Comments</h2>
         <div className='comments-display'>
           {
@@ -32,7 +54,8 @@ function CommentsSection({ comments, setComments, postId, getTimeElapsed }) {
                   postId={postId}
                   comment={comment}
                   setComments={setComments}
-                  getTimeElapsed={getTimeElapsed} 
+                  getTimeElapsed={getTimeElapsed}
+                  currentUser={currentUser} 
                   key={index}/>
               ))
             )

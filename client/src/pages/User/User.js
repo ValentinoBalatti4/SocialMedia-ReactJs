@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "./User.css"
 import Navbar from '../../components/navbar/Navbar'
 import Post from '../../components/posts/Post'
+import CommentsSection from '../../components/commentsSection/CommentsSection'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
@@ -14,6 +15,10 @@ const User = () => {
     const [cookies, removeCookie] = useCookies([]);
     const [currentUser, setCurrentUser] = useState("")
 
+    const [showPostsComments, setShowPostsComments] = useState(false);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [selectedPostComments, setSelectedPostComments] = useState([]);
+  
     const getTimeElapsed = (createdAt) => {
         const objectTimestamp = new Date(createdAt).getTime();
         const currentTimestamp = Date.now();
@@ -65,6 +70,12 @@ const User = () => {
         }   
         fetchUserData();
     }, [setData, username])
+
+    const showComments = (post) => {
+        setSelectedPost(post);
+        setSelectedPostComments(post.comments);
+        setShowPostsComments(true);
+    }
 
     return (
     <div className="user-container">
@@ -120,9 +131,26 @@ const User = () => {
                 </div>
                 <div className="user-posts">
                     {
-                        posts.map((post, index) => (
-                            <Post post={post} currentUser={currentUser} setPosts={setPosts}  getTimeElapsed={getTimeElapsed} key={index}/>
-                        ))
+                        (showPostsComments) ? 
+                            <CommentsSection
+                            comments={selectedPostComments}
+                            setComments={setSelectedPostComments}
+                            setShowPostsComments={setShowPostsComments}
+                            postId={selectedPost._id}
+                            getTimeElapsed={getTimeElapsed}
+                            currentUser={username}
+                            /> 
+                        : (
+                            posts.map((post, index) => (
+                            <Post 
+                                post={post}
+                                currentUser={username}
+                                setPosts={setPosts}
+                                showComments={() => showComments(post)} 
+                                getTimeElapsed={getTimeElapsed}
+                                key={index}/>
+                            ))
+                        )
                     }
                 </div>
             </div>

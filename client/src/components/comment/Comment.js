@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './Comment.css'
 import axios from 'axios';
 
-function Comment({ postId, comment, setComments, getTimeElapsed }) {
+function Comment({ postId, comment, setComments, getTimeElapsed, currentUser }) {
     const [commentOwnerProfilePic, setCommentOwnerProfilePic] = useState("")
 
     useEffect(() => {
@@ -40,13 +40,17 @@ function Comment({ postId, comment, setComments, getTimeElapsed }) {
             <div className='left'>
                 <div className='user-info'>
                     <img src={commentOwnerProfilePic}/>
-                    <a>{comment.username}</a>
+                    <a href={`/${comment.username}`}>{comment.username}</a>
                 </div>
                 <p>{getTimeElapsed(comment.createdAt)}</p>
             </div>
-            <div className='right'>
-                <span className='material-symbols-outlined' onClick={handleDeleteButton}>delete</span>
-            </div>
+            {
+                comment.username === currentUser && (
+                    <div className='right'>
+                        <span className='material-symbols-outlined' onClick={handleDeleteButton}>delete</span>
+                    </div>
+                )
+            }
         </div>
         <div className='comment-body'>
             <p>{comment.text}</p>
