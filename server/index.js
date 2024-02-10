@@ -6,10 +6,11 @@ require('dotenv').config()
 
 const authRoutes = require('./routes/auth')
 const postRoutes = require('./routes/posts')
+const userRoutes = require('./routes/users')
 
 const app = express()
 
-app.use(cors({origin: 'http://localhost:3000', credentials: true, methods: ['GET', 'POST']}))
+app.use(cors({origin: 'http://localhost:3000', credentials: true, methods: ['GET', 'POST', 'DELETE']}))
 app.use(cookieParser())
 app.use(express.json())
 
@@ -25,6 +26,7 @@ mongoose.connect(process.env.MONGO_KEY)
 // Routes
 app.use("/auth", authRoutes)
 app.use("/posts", postRoutes)
+app.use("/users", userRoutes)
 
 //Initialize server
 app.listen(process.env.PORT, () => {

@@ -1,36 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Post.css"
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
-const Post = ({ post, currentUser } ) => {
-  const [likes, setLikes] = useState(post.likes.length)
-  const getTimeElapsed = (createdAt) => {
-    const objectTimestamp = new Date(createdAt).getTime();
-    const currentTimestamp = Date.now();
-    const timeDifferenceInSeconds = Math.floor((currentTimestamp - objectTimestamp) / 1000);
+const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) => {
+  const [likes, setLikes] = useState(post.likes.length);
+  const [comments, setComments] = useState(post.comments.length);
+  const [isLiked, setIsLiked] = useState();
+  const [postOwnerProfilePic, setPostOwnerProfilePic] = useState();
+  const navigate = useNavigate();
 
-    if (timeDifferenceInSeconds < 60) {
-      return `${timeDifferenceInSeconds} seconds ago`;
-    } else if (timeDifferenceInSeconds < 3600) {
-      const minutes = Math.floor(timeDifferenceInSeconds / 60);
-      return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
-    } else if (timeDifferenceInSeconds < 86400) {
-      const hours = Math.floor(timeDifferenceInSeconds / 3600);
-      return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
-    } else if (timeDifferenceInSeconds < 2592000) {
-      const days = Math.floor(timeDifferenceInSeconds / 86400);
-      return `${days} day${days !== 1 ? 's' : ''} ago`;
-    } else {
-      const years = Math.floor(timeDifferenceInSeconds / 31536000);
-      return `${years} year${years !== 1 ? 's' : ''} ago`;
+
+
+  useEffect(() =>{
+    setIsLiked(post.likes.includes(currentUser));
+
+    const fetchUserProfilePic = async () => {
+      try{
+        const res = await axios.get(`http://localhost:4444/users/${post.username}`);
+        setPostOwnerProfilePic(res.data.user.profilePic);
+
+      }catch(error){
+        console.log("Error fetching user profilePic: ", error);
+      }
     }
+    fetchUserProfilePic();
+  }, [post.likes, currentUser]);
+
+  const handleUserClick = () => {
+    navigate(`/${post.username}`)  
   }
 
   const handleDeleteButton = async () => {
     console.log(post._id)
     try{
-      const res = await axios.delete(`http://localhost:4444/posts/delete/${post._id}`, {}, {withCredentials: true});
-      window.location.reload();
+      const res = await axios.post(`http://localhost:4444/posts/delete/${post._id}`, {}, {withCredentials: true});
+
+      setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
     }catch(e){
       console.log(e)
     }
@@ -38,19 +44,21 @@ const Post = ({ post, currentUser } ) => {
 
   const hanleLikeButton = async () => {
     try{
-        const res = await axios.post(`http://localhost:4444/posts/like/${post._id}`, {withCredentials: true});
-
+        const res = await axios.post(`http://localhost:4444/posts/like/${post._id}`,  {}, {withCredentials: true});
+        
+        setLikes(res.data.likes.length);
+        setIsLiked(res.data.likes.includes(currentUser));
     }catch(e){
       console.log(e);
     }
   }
-  
+
   return (
     <div className="post-container">
         <div className="post-header">
           <div className='left'>
-            <div className="post-userinfo">
-                <img src="https://picsum.photos/200/300"/>
+            <div className="post-userinfo" onClick={handleUserClick}>
+                <img src={postOwnerProfilePic}/>
                 <a>{post.username}</a>
             </div>
             <p>{getTimeElapsed(post.createdAt)}</p>
@@ -58,7 +66,7 @@ const Post = ({ post, currentUser } ) => {
           {  
             (currentUser === post.username) && (
               <div className='post-options'>
-                <span className='material-symbols-outlined' onClick={handleDeleteButton}>delete</span>
+                <span className="material-symbols-outlined" onClick={handleDeleteButton}>delete</span>
               </div>
             )
           }
@@ -74,11 +82,12 @@ const Post = ({ post, currentUser } ) => {
         }
         <div className="interactions">
             <div className="likes-container">
-                <span className="material-symbols-outlined"onClick={hanleLikeButton} >favorite</span>
-                <p>11</p>
+                <span className={`material-symbols-outlined likes-icon ${isLiked ? 'liked' : ''}`} onClick={hanleLikeButton} >favorite</span>
+                <p>{likes}</p>
             </div>
             <div className="comments-container">
-                <span className="material-symbols-outlined">comment</span>
+                <span className="material-symbols-outlined" onClick={showComments}>comment</span>
+                <p>{comments}</p>
             </div>
         </div>
     </div>

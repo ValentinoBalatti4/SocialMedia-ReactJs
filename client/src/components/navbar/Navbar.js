@@ -3,7 +3,8 @@ import "./Navbar.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Navbar = ({ isLogged, removeCookie }) => {
+
+const Navbar = ({ isLogged, removeCookie, currentUser }) => {
     const [input, setInput] = useState("")
     console.log(isLogged)
     const navigate = useNavigate()
@@ -30,9 +31,13 @@ const Navbar = ({ isLogged, removeCookie }) => {
                 <span className="material-symbols-outlined">menu</span>
             </div>
             <div className='options-container'>
-                <div>
-                    <a>Lorem ipsum</a>
-                </div>
+                {isLogged ? (
+                    <div>
+                        <a href={`/${currentUser}`}>My profile</a>
+                    </div>
+                )
+                    : <></>
+                }
                 <div>
                     {
                         isLogged ? <a onClick={(e) => logout()}>Log out</a> : <a href='/login'>Log in</a>

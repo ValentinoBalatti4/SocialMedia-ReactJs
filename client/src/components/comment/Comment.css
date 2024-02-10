@@ -1,0 +1,57 @@
+.comment-container{
+    padding: 10px;
+    border-bottom: 1px lightgray solid;
+}
+
+.comment-container-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-container-header .left{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-container-header .right span{
+    font-size: 22px;
+    cursor: pointer;
+}   
+
+.comment-container-header .right span:hover{
+    color: #aa1212;
+
+}
+
+
+.comment-container-header p{
+    font-size: 14px;
+    color: gray;
+}
+
+.user-info{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-info img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.user-info a{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.user-info a:hover{
+    text-decoration: underline;
+}
+
+.comment-body{
+    padding: 0 10px;
+}

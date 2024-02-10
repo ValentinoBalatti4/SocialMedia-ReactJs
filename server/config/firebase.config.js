@@ -1,7 +1,6 @@
 require('dotenv').config();
 
-
-firebaseConfig = {
+const firebaseConfig = {
     apiKey: process.env.FB_API_KEY,
     authDomain: process.env.FB_AUTH_DOMAIN,
     projectId: "my-social-media-af5c3",

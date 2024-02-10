@@ -5,15 +5,21 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const tokenManagment = require('../middleware/tokenManagment')
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     try {
         const { password, username } = req.body;
         const existingUser = await User.findOne({ username });
-        if (existingUser) {
-          return res.json({ message: "User already exists" });
-        }
-        const user = await User.create({ password, username });
-        const token = createSecretToken(user._id);
+        
+        if (existingUser) return res.json({ message: "User already exists" });
+        
+        const hashedPassword = await bcrypt.hash(password, 5);
+
+        const user = await User.create({ 
+          username: username,
+          password: hashedPassword
+        });
+
+        const token = tokenManagment.createSecretToken({ id: user._id, username: user.username });
         res.cookie("token", token, {
           withCredentials: true,
           httpOnly: false,
@@ -25,6 +31,7 @@ router.post('/register', async (req, res) => {
         next();
       } catch (error) {
         console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
       }
 })
 

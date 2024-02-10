@@ -28,6 +28,31 @@
     box-shadow: 1px 1px 4px 1px gray;
 }
 
+.upload-post .image-preview{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.upload-post .image-preview img{
+    width: 95%;
+    border-radius: 5px;
+}
+
+.upload-post .image-preview span{
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    background-color: #aaaaaacb;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.upload-post .image-preview span:hover{
+    background-color: rgba(255, 255, 255, 0.493);
+}
 .upload-options{
     width: 100%;
     display: flex;

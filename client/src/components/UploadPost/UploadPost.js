@@ -10,10 +10,16 @@ const UploadPost = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(0)
   const [error, setError] = useState("")
 
+  const [imageUrl, setImageUrl] = useState(''); // State for image preview URL
+
   const navigate = useNavigate()
 
   const selectImage = (e) => {
     setImage(e.target.files[0])
+
+    // Create a URL for the selected image and set it in the state
+    const imageUrl = URL.createObjectURL(e.target.files[0]);
+    setImageUrl(imageUrl);
   }
 
   const uploadPost = async (e) => {
@@ -36,10 +42,22 @@ const UploadPost = () => {
     }
   }
 
+  const handleCancelImgUpload = () => {
+    setImage("");
+    setImageUrl("");
+  }
 
   return (
-    <form className='upload-post'  onSubmit={uploadPost}>
+    <form className='upload-post' onSubmit={uploadPost}>
         <textarea placeholder="Share what you 're thinking..." value={postText} onChange={e => setPostText(e.target.value)}/>
+        {
+          (image) && (
+            <div className='image-preview'>
+              <span className='material-symbols-outlined' onClick={handleCancelImgUpload}>close</span>
+              <img src={imageUrl} alt='image-preview'/>
+            </div>
+          )
+        }
         <div className="upload-options">
             <div>
                 <input className='submit-btn' type='submit' value='Upload'/>
@@ -61,7 +79,6 @@ const UploadPost = () => {
                 <div>
                   <span className="material-symbols-outlined">mood</span>
                 </div>
-
             </div>
         </div>
     </form>

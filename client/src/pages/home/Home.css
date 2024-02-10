@@ -4,6 +4,10 @@
     
 }
 
+.blur-background{
+    
+}
+
 .home-wrapper{
     width: 100%;
     display: flex;
@@ -16,4 +20,10 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
+}
+
+
+.x{
+    filter: none;
+    z-index: 1;
 }

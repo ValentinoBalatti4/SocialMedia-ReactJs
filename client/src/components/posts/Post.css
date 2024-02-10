@@ -88,6 +88,15 @@
     cursor: pointer;
 }
 
+.likes-container .likes-icon.liked{
+    color: #aa1212;
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}   
+
 @media screen and (max-width: 768px){
     .image-container img{
         width: 100%;

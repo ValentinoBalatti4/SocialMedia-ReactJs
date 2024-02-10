@@ -84,7 +84,26 @@ nav{
 }
 
 .options-container a{
+    color: #F6F1F1;
+    text-decoration: none;
+    position: relative;
     cursor: pointer;
+    font-size: 22px;
+}
+
+.options-container a::after{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px; /* Set the underline height */
+    background-color: #ffffff; /* Set the underline color */
+    bottom: 0;
+    left: 0;
+    transition: width 0.3s ease; /* Adjust the transition duration and timing function */
+}
+
+.options-container a:hover::after{
+    width: 100%;
 }
 
 .results{
