@@ -30,7 +30,7 @@ const UploadPost = ({ setPosts }) => {
         setPostText("");
         setImage("");
 
-        setPosts((prevPosts) => [res.data.newPost, ...prevPosts]);
+        setPosts((prevPosts) => [res.data.newPost, ...prevPosts]);        
       }catch (e){
         setError(e.message);
         console.log(e);

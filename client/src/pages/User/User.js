@@ -14,6 +14,7 @@ const User = () => {
     const [isLoggedIn, setIsLoggedIn] = useState();
     const [cookies, removeCookie] = useCookies([]);
     const [currentUser, setCurrentUser] = useState("")
+    const [followers, setFollowers] = useState([]);
 
     const [showPostsComments, setShowPostsComments] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -61,6 +62,7 @@ const User = () => {
             try{
                 const dataResponse = await axios.get(`http://localhost:4444/users/${username}`);
                 setData(dataResponse.data);
+                setFollowers(dataResponse.followers);
 
                 const postsResponse = await axios.get(`http://localhost:4444/posts/${username}/posts`);
                 setPosts(postsResponse.data.posts);
@@ -77,26 +79,59 @@ const User = () => {
         setShowPostsComments(true);
     }
 
+    const handleFollowButton = async () => {
+        try{
+            const res = await axios.post(`http://localhost:4444/users/follow/${username}`, {}, {withCredentials: true});
+            console.log(res);
+            res.status === 200 && (
+                setFollowers(res.data.followers)
+            )
+
+
+        } catch(error){
+            console.log(error);
+        }
+    }
+
     return (
     <div className="user-container">
         <Navbar isLogged={isLoggedIn} removeCookie={removeCookie} currentUser={currentUser}/>
         <div className="user-wrapper">
-            <div className="user-banner">
-                <div className="banner-user-profile">
-                    <img src={data.user?.profilePic}/>
-                    <h1>{data.user?.username}</h1>
+            <div className='center-container'>
+                <div className="user-banner">
+                    <div className="banner-user-profile">
+                        <img src={data.user?.profilePic}/>
+                    </div>
+                    <div className="banner-user-info">
+                        <div className='top'>
+                            <h1>{data.user?.username}</h1>
+                            {
+                                (currentUser !== username) && (
+                                    <div className='user-interactions'>
+                                        {
+                                            followers?.includes(currentUser)
+                                            ? <span id='follow-btn' onClick={handleFollowButton}>Unfollow</span> 
+                                            : <span id='follow-btn' onClick={handleFollowButton}>Follow</span>
+                                        }
+                                        <span id='message-btn'>Message</span>
+                                    </div>
+                                )
+                            }
+                        </div>
+                        <div className='bottom'>
+                            <div>
+                                <b><span>{posts.length}</span> posts</b>
+                            </div>
+                            <div>
+                                <b><span>{data.user?.following.length}</span> following</b>
+                            </div>
+                            <div>
+                                <b><span>{followers?.length}</span> followers</b>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="banner-user-info">
-                    <div>
-                        <b>Posts: <span>{posts.length}</span></b>
-                    </div>
-                    <div>
-                        <b>Following: <span>{data.user?.following.length}</span></b>
-                    </div>
-                    <div>
-                        <b>Followers: <span>{data.user?.followers.length}</span></b>
-                    </div>
-                </div>
+            
             </div>
             <div className="user-main">
                 <div className="user-contacts"> 

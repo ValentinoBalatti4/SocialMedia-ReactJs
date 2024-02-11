@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../../components/loader/Loader'
 
 const Home = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const Home = () => {
   const [showPostsComments, setShowPostsComments] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [selectedPostComments, setSelectedPostComments] = useState([]);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTimeElapsed = (createdAt) => {
     const objectTimestamp = new Date(createdAt).getTime();
@@ -53,23 +56,36 @@ const Home = () => {
 
   useEffect(() => {
     const verifyCookie = async () => {
-      if(!cookies.token){navigate("/login");}
-      const { data } = await axios.post(
-        "http://localhost:4444/auth/",
-        {},
-        {withCredentials: true}
-      )
-      const { status, user } = data;
-      setUsername(user)
-      return status
-      ? (setIsLoggedIn(1),
+      if (!cookies.token) {
+        navigate("/login");
+      }
+      try {
+        const { data } = await axios.post(
+          "http://localhost:4444/auth/",
+          {},
+          { withCredentials: true }
+        );
+        const { status, user } = data;
+        if (status) {
+          setIsLoggedIn(1);
+          setUsername(user);
           toast(`Hello ${user}`, {
             position: "bottom-left",
-          }))
-        : (removeCookie("token"), navigate("/login"));}
+          });
+        } else {
+          removeCookie("token");
+          navigate("/login");
+        }
+      } catch (e) {
+        console.log(e);
+      }finally{
+        setIsLoading(false);
+      }
+    };
+  
     verifyCookie();
   }, [cookies, navigate, removeCookie]);
-
+  
   useEffect(() => {
     const getPosts = async () => {
       try{
@@ -95,13 +111,6 @@ const Home = () => {
     }
   };
 
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleOutsideClick);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleOutsideClick);
-  //   };
-  // }, [showPostsComments, handleOutsideClick]);
-
   const showComments = async (post) => {
       setSelectedPost(post);
       setSelectedPostComments(post.comments);
@@ -118,26 +127,29 @@ const Home = () => {
               isLoggedIn && <UploadPost setPosts={setPosts}/>
             }
             {
-              (showPostsComments) ? 
-                <CommentsSection
-                  comments={selectedPostComments}
-                  setComments={setSelectedPostComments}
-                  setShowPostsComments={setShowPostsComments}
-                  postId={selectedPost._id}
-                  getTimeElapsed={getTimeElapsed}
-                  currentUser={username}
-                /> 
-              : (
-                posts.map((post, index) => (
-                  <Post 
-                    post={post}
-                    currentUser={username}
-                    setPosts={setPosts}
-                    showComments={() => showComments(post)} 
+              !isLoading ?
+                (showPostsComments) ? 
+                  <CommentsSection
+                    comments={selectedPostComments}
+                    setComments={setSelectedPostComments}
+                    setShowPostsComments={setShowPostsComments}
+                    postId={selectedPost._id}
                     getTimeElapsed={getTimeElapsed}
-                    key={index}/>
-                ))
-              )
+                    currentUser={username}
+                  /> 
+                : (
+                  posts.map((post, index) => (
+                    <Post 
+                      post={post}
+                      currentUser={username}
+                      setPosts={setPosts}
+                      showComments={() => showComments(post)} 
+                      getTimeElapsed={getTimeElapsed}
+                      key={index}/>
+                  ))
+                )
+                :
+                <Loader/>
             }
           </div>
         </div>

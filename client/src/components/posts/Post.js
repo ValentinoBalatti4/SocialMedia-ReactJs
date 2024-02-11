@@ -6,15 +6,11 @@ import { useNavigate } from 'react-router-dom';
 const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) => {
   const [likes, setLikes] = useState(post.likes.length);
   const [comments, setComments] = useState(post.comments.length);
-  const [isLiked, setIsLiked] = useState();
+  const [isLiked, setIsLiked] = useState(post?.likes.includes(currentUser));
   const [postOwnerProfilePic, setPostOwnerProfilePic] = useState();
   const navigate = useNavigate();
 
-
-
   useEffect(() =>{
-    setIsLiked(post.likes.includes(currentUser));
-
     const fetchUserProfilePic = async () => {
       try{
         const res = await axios.get(`http://localhost:4444/users/${post.username}`);
@@ -25,6 +21,11 @@ const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) =>
       }
     }
     fetchUserProfilePic();
+  }, []);
+
+  useEffect(() => {
+    setLikes(post.likes.length);
+    setIsLiked(post.likes.includes(currentUser));
   }, [post.likes, currentUser]);
 
   const handleUserClick = () => {
