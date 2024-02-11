@@ -24,7 +24,7 @@ function Comment({ postId, comment, setComments, getTimeElapsed, currentUser }) 
 
             if(res.status === 200){
                 const updatedComments = res.data.comments;
-                setComments((prevComments) => prevComments.filter((c) => c.id !== comment.id))
+                setComments(updatedComments);
             }
 
 

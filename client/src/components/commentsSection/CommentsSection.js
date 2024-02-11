@@ -44,27 +44,29 @@ const CommentsSection = ({
   }
 
   return (
-    <div className='commentsSection-container' ref={commentsSectionRef}>
-        <h2>Comments</h2>
-        <div className='comments-display'>
-          {
-            comments.length ===  0 ? <p>There are no comments yet...</p> : (
-              comments.map((comment, index) => (
-                <Comment 
-                  postId={postId}
-                  comment={comment}
-                  setComments={setComments}
-                  getTimeElapsed={getTimeElapsed}
-                  currentUser={currentUser} 
-                  key={index}/>
-              ))
-            )
-          }
-        </div>
-        <div className='upload-comment-container'>
-          <input value={commentText} onChange={(e) => setCommentText(e.target.value)}/>
-          <span className='material-symbols-outlined' onClick={handleUploadComment}>send</span>
-        </div>
+    <div className='background'>
+      <div className='commentsSection-container' ref={commentsSectionRef}>
+          <h2>Comments</h2>
+          <div className='comments-display'>
+            {
+              comments.length ===  0 ? <p>There are no comments yet...</p> : (
+                comments.map((comment, index) => (
+                  <Comment 
+                    postId={postId}
+                    comment={comment}
+                    setComments={setComments}
+                    getTimeElapsed={getTimeElapsed}
+                    currentUser={currentUser} 
+                    key={index}/>
+                ))
+              )
+            }
+          </div>
+          <div className='upload-comment-container'>
+            <input value={commentText} onChange={(e) => setCommentText(e.target.value)}/>
+            <span className='material-symbols-outlined' onClick={handleUploadComment}>send</span>
+          </div>
+      </div>
     </div>
   )
 }
