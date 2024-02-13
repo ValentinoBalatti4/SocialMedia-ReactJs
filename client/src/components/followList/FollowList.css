@@ -1,0 +1,48 @@
+.background{
+    position: fixed;
+    width: 101%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background-color: rgba(46, 46, 46, 0.9);
+    backdrop-filter: blur(2px);
+}
+
+.followList-container{
+    width: 40%;
+    height: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #f2f2f2;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.followList-container .userList{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+    overflow: scroll;
+}
+
+.followList-container .user-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 5px;
+    border-bottom:1px solid gray ;
+}
+
+.followList-container .user-interactions{
+    display: flex;
+    gap: 10px;
+}
+
+

@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import Error from '../Error/Error'
 import "./UploadPost.css"
+import Error from '../Error/Error'
+import Loader from '../loader/Loader'
 import axios from 'axios'
 
 const UploadPost = ({ setPosts }) => {
   const [postText, setPostText] = useState("")
   const [image, setImage] = useState("")
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(''); // State for image preview URL
 
@@ -22,6 +24,7 @@ const UploadPost = ({ setPosts }) => {
     e.preventDefault()
     if(postText !== "" || image !== ""){
       try{
+        setIsLoading(true);
         const formData = new FormData()
         formData.append('text', postText)
         formData.append('image', image)
@@ -31,6 +34,7 @@ const UploadPost = ({ setPosts }) => {
         setImage("");
 
         setPosts((prevPosts) => [res.data.newPost, ...prevPosts]);        
+        setIsLoading(false);
       }catch (e){
         setError(e.message);
         console.log(e);
@@ -60,6 +64,7 @@ const UploadPost = ({ setPosts }) => {
             <div>
                 <input className='submit-btn' type='submit' value='Upload'/>
             </div>
+            {isLoading && (<Loader/>)}
             { error && <Error message={error} clearError={() => setError(undefined)}/> }
             <div className='upload-options-extra'>
                 <div>

@@ -6,6 +6,7 @@ import CommentsSection from '../../components/commentsSection/CommentsSection'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import FollowList from '../../components/followList/FollowList'
 
 const User = () => {
     const { username } = useParams();
@@ -15,6 +16,9 @@ const User = () => {
     const [cookies, removeCookie] = useCookies([]);
     const [currentUser, setCurrentUser] = useState("")
     const [followers, setFollowers] = useState([]);
+    const [followings, setFollowings] = useState([]);
+    const [showFollowList, setShowFollowList] = useState(false);
+    const [selectedFollowList, setSelectedFollowList] = useState("")
 
     const [showPostsComments, setShowPostsComments] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -61,8 +65,9 @@ const User = () => {
         const fetchUserData = async () => {
             try{
                 const dataResponse = await axios.get(`http://localhost:4444/users/${username}`);
-                setData(dataResponse.data);
-                setFollowers(dataResponse.followers);
+                setData(dataResponse.data.user);
+                setFollowers(dataResponse.data.user.followers);
+                setFollowings(dataResponse.data.user.followings);
 
                 const postsResponse = await axios.get(`http://localhost:4444/posts/${username}/posts`);
                 setPosts(postsResponse.data.posts);
@@ -79,19 +84,24 @@ const User = () => {
         setShowPostsComments(true);
     }
 
-    const handleFollowButton = async () => {
+    const handleFollowButton = async (username) => {
         try{
             const res = await axios.post(`http://localhost:4444/users/follow/${username}`, {}, {withCredentials: true});
-            console.log(res);
-            res.status === 200 && (
-                setFollowers(res.data.followers)
-            )
-
-
+            if (res.status === 200) {
+                setFollowers(res.data.followers);
+                console.log("updated followers: ", followers);
+            }
         } catch(error){
             console.log(error);
         }
     }
+
+    const handleShowFollowList = (listType) => {
+        setSelectedFollowList(listType);
+        setShowFollowList(true);
+    }
+
+    console.log(followings)
 
     return (
     <div className="user-container">
@@ -100,19 +110,21 @@ const User = () => {
             <div className='center-container'>
                 <div className="user-banner">
                     <div className="banner-user-profile">
-                        <img src={data.user?.profilePic}/>
+                        <img src={data.profilePic}/>
                     </div>
                     <div className="banner-user-info">
                         <div className='top'>
-                            <h1>{data.user?.username}</h1>
+                            <h1>{data.username}</h1>
                             {
                                 (currentUser !== username) && (
                                     <div className='user-interactions'>
+                                        <span id='follow-btn' className={followers?.includes(currentUser) ? 'unfollow' : ''} onClick={handleFollowButton(username)}>
                                         {
-                                            followers?.includes(currentUser)
-                                            ? <span id='follow-btn' onClick={handleFollowButton}>Unfollow</span> 
-                                            : <span id='follow-btn' onClick={handleFollowButton}>Follow</span>
+                                            followers?.includes(currentUser) ? 'Unfollow' : 'Follow'       
                                         }
+                                        </span> 
+                                                
+                                                
                                         <span id='message-btn'>Message</span>
                                     </div>
                                 )
@@ -120,13 +132,19 @@ const User = () => {
                         </div>
                         <div className='bottom'>
                             <div>
-                                <b><span>{posts.length}</span> posts</b>
+                                <b>
+                                    <span>{posts.length}</span> posts
+                                </b>
                             </div>
                             <div>
-                                <b><span>{data.user?.following.length}</span> following</b>
+                                <b onClick={e => handleShowFollowList('following')}>
+                                    <span>{data.following?.length}</span> following
+                                </b>
                             </div>
                             <div>
-                                <b><span>{followers?.length}</span> followers</b>
+                                <b onClick={e => handleShowFollowList('followers')}>
+                                    <span>{followers?.length}</span> followers
+                                </b>
                             </div>
                         </div>
                     </div>
@@ -134,36 +152,6 @@ const User = () => {
             
             </div>
             <div className="user-main">
-                <div className="user-contacts"> 
-                    <h6>Friends  <p>(10)</p></h6>
-                    <div className="contacts">
-                        <div className="contact">
-                            <img src='https://picsum.photos/300/300'/>
-                            <a>Jhon doe</a>
-                        </div>
-                    </div>
-
-                    <div className="contacts">
-                        <div className="contact">
-                            <img src='https://picsum.photos/300/300'/>
-                            <a>Jhon doe</a>
-                        </div>
-                    </div>
-
-                    <div className="contacts">
-                        <div className="contact">
-                            <img src='https://picsum.photos/300/300'/>
-                            <a>Jhon doe</a>
-                        </div>
-                    </div>
-
-                    <div className="contacts">
-                        <div className="contact">
-                            <img src='https://picsum.photos/300/300'/>
-                            <a>Jhon doe</a>
-                        </div>
-                    </div>
-                </div>
                 <div className="user-posts">
                     {
                         (showPostsComments) ? 
@@ -179,7 +167,7 @@ const User = () => {
                             posts.map((post, index) => (
                             <Post 
                                 post={post}
-                                currentUser={username}
+                                currentUser={currentUser}
                                 setPosts={setPosts}
                                 showComments={() => showComments(post)} 
                                 getTimeElapsed={getTimeElapsed}
@@ -189,6 +177,17 @@ const User = () => {
                     }
                 </div>
             </div>
+            {
+                showFollowList && (
+                    <FollowList
+                        listType={selectedFollowList}
+                        follows={selectedFollowList === 'followers' ? followers : followings}
+                        setShowFollowList={setShowFollowList}
+                        currentUser={currentUser}
+                        handleFollowButton={handleFollowButton}
+                    />
+                )
+            }
         </div>
     </div>
     )}

@@ -6,6 +6,27 @@ const User = require('../models/User')
 const multer = require("multer")
 const tokenManagment = require('../middleware/tokenManagment')
 
+router.get('/discover', tokenManagment.userLogged, async (req, res) => {
+    try{
+        const currentUser = req.user;
+
+        const query = currentUser
+            ? { username: { $ne: currentUser.username }, followers: { $nin: [currentUser.username] } }
+            : {};
+
+        const randomUsers = await User.aggregate([
+            { $match: query },
+            { $sample: { size: 10 } } // Retrieve a random sample of 10 users
+        ]);
+
+        res.status(200).json({ users: randomUsers });
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+})
+
 
 router.get('/search', async (req, res) => {
     try{
@@ -20,7 +41,7 @@ router.get('/search', async (req, res) => {
 })
 
 router.get('/:username', async (req, res) => {
-        const username = req.params.username;
+        const username = req.params?.username;
     try{
         const user = await User.findOne({ username: username });
 
@@ -44,24 +65,28 @@ router.get('/:username', async (req, res) => {
 })
 
 router.post("/follow/:username", tokenManagment.userLogged, async (req, res) => {
-    try{
+    try {
         const targetUser = await User.findOne({ username: req.params.username });
         const currentUser = await User.findById(req.user._id);
 
-        if(!targetUser.followers.some(follower => follower === req.user.username)){
-            await targetUser.updateOne({ $push: {followers:  req.user.username} })
-            await currentUser.updateOne({ $push: {following: targetUser.username} })        
-        } else{
-            await targetUser.updateOne({ $pull: {followers: req.user.username} })
-            await currentUser.updateOne({ $pull: { following: targetUser.username} })
+        if (!targetUser.followers.some(follower => follower === req.user.username)) {
+            await targetUser.followers.push(req.user.username);
+            await currentUser.following.push(targetUser.username);
+        } else {
+            await targetUser.followers.pull(req.user.username);
+            await currentUser.following.pull(targetUser.username);
         }
 
-        json.status(200).json({ message: 'Operation Success!', following: currentUser.following })
+        await targetUser.save();
+        await currentUser.save();
 
-    } catch (err){
+        res.status(200).json({ message: 'Operation Success!',followers: targetUser.followers});
+
+    } catch (err) {
+        console.error(err);
         res.status(500).json({ message: 'Internal server error' });
     }
-})
+});
 
 
 module.exports = router

@@ -1,9 +1,11 @@
 import React from 'react'
 import './Loader.css';
 
-function Loader() {
+function Loader({ context }) {
   return (
-    <div id="loading"></div>
+    <div className={`loader-container ${context === 'particular' && ('particular')}`}>
+      <div id="loading"></div>
+    </div>
   )
 }
 

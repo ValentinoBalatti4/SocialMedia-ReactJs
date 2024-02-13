@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import "./Post.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import Loader from '../loader/Loader';
 
 const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) => {
   const [likes, setLikes] = useState(post.likes.length);
   const [comments, setComments] = useState(post?.comments.length);
   const [isLiked, setIsLiked] = useState(post?.likes.includes(currentUser));
   const [postOwnerProfilePic, setPostOwnerProfilePic] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() =>{
@@ -15,7 +17,6 @@ const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) =>
       try{
         const res = await axios.get(`http://localhost:4444/users/${post.username}`);
         setPostOwnerProfilePic(res.data.user.profilePic);
-
       }catch(error){
         console.log("Error fetching user profilePic: ", error);
       }
@@ -35,9 +36,11 @@ const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) =>
 
   const handleDeleteButton = async () => {
     try{
+      setIsLoading(true);
       const res = await axios.post(`http://localhost:4444/posts/delete/${post._id}`, {}, {withCredentials: true});
       console.log(res)
       setPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+      setIsLoading(false);
     }catch(e){
       console.log(e)
     }
@@ -91,6 +94,7 @@ const Post = ({ post, currentUser, setPosts, showComments, getTimeElapsed } ) =>
                 <p>{comments}</p>
             </div>
         </div>
+        {isLoading && ( <Loader/>)}
     </div>
   )
 }
