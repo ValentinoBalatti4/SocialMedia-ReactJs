@@ -23,6 +23,7 @@
 }
 
 .banner-user-profile{
+    position: relative;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -33,6 +34,50 @@
     height: 160px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.banner-user-profile span{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    color: #ffffff;
+    background-color: #d6d6d6;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.banner-user-profile span:hover{
+    color: #000;
+    background-color: #e1e1e1;
+    transform: scale(1.1);
+}
+
+.profilePic-options{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    height: 4rem;
+    background-color: #f6f1f1;
+
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 3px 4px 10px rgba(0,0,0,0.41);
+}
+
+.profilePic-options .options{
+    padding:4px;
+    border-radius: 10px;
+}
+
+.profilePic-options .options:hover{
+    background-color: #fdfdfd;
+}
+
+.profilePic-options b{
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .banner-user-info{

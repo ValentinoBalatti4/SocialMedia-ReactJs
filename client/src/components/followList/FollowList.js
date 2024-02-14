@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './FollowList.css'
 import axios from 'axios';
 
-const FollowList = ({ listType, follows, setShowFollowList, currentUser, handleFollowButton }) => {
+const FollowList = ({ listType, follows, setFollowing, setShowFollowList, currentUser, handleFollowButton, profileUsername }) => {
     const [currentUserFollowList, setCurrentUserFollowList] = useState([])
     
     const followListRef = useRef(null);
@@ -20,21 +20,19 @@ const FollowList = ({ listType, follows, setShowFollowList, currentUser, handleF
         };
     }, [setShowFollowList]);
     
-    useEffect(() => {
-        const fetchCurrentUserFollows = async () => {
-            try{
-                const res = await axios.get(`http://localhost:4444/users/${currentUser}`);
+    const fetchCurrentUserFollows = async () => {
+        try{
+            const res = await axios.get(`http://localhost:4444/users/${currentUser}`);
 
-                setCurrentUserFollowList(res.data.user.following);
-            }catch(error){
-                console.log(error);
-            }
+            setCurrentUserFollowList(res.data.user.following);
+        }catch(error){
+            console.log(error);
         }
+    }
+
+    useEffect(() => {
         fetchCurrentUserFollows();
-    },[])
-
-
-
+    },[fetchCurrentUserFollows])
 
     return (
     <div className='background'>
@@ -45,13 +43,22 @@ const FollowList = ({ listType, follows, setShowFollowList, currentUser, handleF
                     follows.map((follow, index) => (
                         <div className='user-container' key={index}>
                             <div className='user-info'>
-                                
                                 <a>{follow}</a>
                             </div>
                             {
                                 follow !== currentUser && (
                                     <div className='user-interactions'>
-                                            <span id='follow-btn' className={currentUserFollowList?.includes(follow) ? 'unfollow' : ''} onClick={handleFollowButton(follow)}>
+                                            <span id='follow-btn' 
+                                                className={currentUserFollowList?.includes(follow) ? 'unfollow' : ''}
+                                                onClick={e => {
+                                                    handleFollowButton(follow);
+                                                    fetchCurrentUserFollows();
+                                                    if(profileUsername === currentUser) {
+                                                        setFollowing(currentUserFollowList)
+                                                    }
+                                                    console.log(currentUser + " " + profileUsername)
+                                                    }
+                                                }>
                                             {
                                                 currentUserFollowList?.includes(follow) ? 'Unfollow' : 'Follow'       
                                             }

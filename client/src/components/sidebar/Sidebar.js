@@ -10,7 +10,6 @@ const Sidebar = () => {
     const fetchUsers = async () => {
       const res = await axios.get(`http://localhost:4444/users/discover/`,  {withCredentials: true});
 
-      console.log(res);
       setUsers(res.data.users);
     }
     fetchUsers();

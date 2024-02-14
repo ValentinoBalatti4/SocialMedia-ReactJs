@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./User.css"
 import Navbar from '../../components/navbar/Navbar'
 import Post from '../../components/posts/Post'
@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import FollowList from '../../components/followList/FollowList'
+import Sidebar from '../../components/sidebar/Sidebar'
 
 const User = () => {
     const { username } = useParams();
@@ -24,6 +25,10 @@ const User = () => {
     const [selectedPost, setSelectedPost] = useState(null);
     const [selectedPostComments, setSelectedPostComments] = useState([]);
   
+    const [profilePicOptionsOpen, setProfilePicOptionsOpen] = useState(false);
+
+    const profileOptionsRef = useRef(null);
+
     const getTimeElapsed = (createdAt) => {
         const objectTimestamp = new Date(createdAt).getTime();
         const currentTimestamp = Date.now();
@@ -52,7 +57,6 @@ const User = () => {
                 const { data } = await axios.post(`http://localhost:4444/auth/`, {}, {withCredentials: true});
                 const { status, user } = data;
                 
-                console.log(user)
                 return status && (setIsLoggedIn(true), setCurrentUser(user));
             }catch(error){
                 console.log(error);
@@ -67,7 +71,7 @@ const User = () => {
                 const dataResponse = await axios.get(`http://localhost:4444/users/${username}`);
                 setData(dataResponse.data.user);
                 setFollowers(dataResponse.data.user.followers);
-                setFollowings(dataResponse.data.user.followings);
+                setFollowings(dataResponse.data.user.following);
 
                 const postsResponse = await axios.get(`http://localhost:4444/posts/${username}/posts`);
                 setPosts(postsResponse.data.posts);
@@ -77,6 +81,16 @@ const User = () => {
         }   
         fetchUserData();
     }, [setData, username])
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileOptionsRef.current && !profileOptionsRef.current.contains(event.target)) {
+                setProfilePicOptionsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [setProfilePicOptionsOpen, profileOptionsRef]);
 
     const showComments = (post) => {
         setSelectedPost(post);
@@ -101,24 +115,42 @@ const User = () => {
         setShowFollowList(true);
     }
 
-    console.log(followings)
-
     return (
     <div className="user-container">
         <Navbar isLogged={isLoggedIn} removeCookie={removeCookie} currentUser={currentUser}/>
         <div className="user-wrapper">
+            <Sidebar/>
             <div className='center-container'>
                 <div className="user-banner">
                     <div className="banner-user-profile">
                         <img src={data.profilePic}/>
+                        {
+                            username === currentUser && (
+                                <span className='material-symbols-outlined' onClick={e => setProfilePicOptionsOpen(true)}>
+                                    more_horiz
+                                </span>
+                            )
+                        }
                     </div>
+                        {
+                            profilePicOptionsOpen && (
+                                <div className='profilePic-options' ref={profileOptionsRef}>
+                                    <div className='options'>
+                                        <b>Change profile picture</b>
+                                    </div>
+                                    <div className='options'>
+                                        <b>Delete profile picture</b>
+                                    </div>
+                                </div>
+                            )
+                        }
                     <div className="banner-user-info">
                         <div className='top'>
                             <h1>{data.username}</h1>
                             {
                                 (currentUser !== username) && (
                                     <div className='user-interactions'>
-                                        <span id='follow-btn' className={followers?.includes(currentUser) ? 'unfollow' : ''} onClick={handleFollowButton(username)}>
+                                        <span id='follow-btn' className={followers?.includes(currentUser) ? 'unfollow' : ''} onClick={e => handleFollowButton(username)}>
                                         {
                                             followers?.includes(currentUser) ? 'Unfollow' : 'Follow'       
                                         }
@@ -182,9 +214,11 @@ const User = () => {
                     <FollowList
                         listType={selectedFollowList}
                         follows={selectedFollowList === 'followers' ? followers : followings}
+                        setFollowing={setFollowings}
                         setShowFollowList={setShowFollowList}
                         currentUser={currentUser}
                         handleFollowButton={handleFollowButton}
+                        profileUsername={username}
                     />
                 )
             }

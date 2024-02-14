@@ -45,4 +45,7 @@
     gap: 10px;
 }
 
+.followList-container .user-container span{
+    height: 35px;
+}
 
