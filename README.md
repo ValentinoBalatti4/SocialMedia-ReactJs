@@ -1,10 +1,10 @@
 # SuperAwesome Social Blog
 
-Welcome to **SuperAwesome Social Blog**, where inspiration meets connection in the digital realm!
+Welcome to **TalkWire**, where inspiration meets connection in the digital realm!
 
 ## Overview
 
-SuperAwesome Social Blog is a dynamic web application that brings together the power of the MERN (MongoDB, Express.js, React, Node.js) stack with the flexibility and real-time capabilities of Firebase. This platform is designed for both seasoned bloggers and avid readers, providing an immersive experience for sharing stories, connecting with like-minded individuals, and discovering unique content.
+TalkWire Social Blog is a dynamic web application that brings together the power of the MERN (MongoDB, Express.js, React, Node.js) stack with the flexibility and real-time capabilities of Firebase. This platform is designed for both seasoned bloggers and avid readers, providing an immersive experience for sharing stories, connecting with like-minded individuals, and discovering unique content.
 
 ## Features
 
