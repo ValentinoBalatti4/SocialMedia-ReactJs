@@ -10,6 +10,7 @@
 .post-header{
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid lightgray;
 }
 
 .post-header .left{
@@ -103,5 +104,28 @@
         width: 100%;
         height: 50vh;
 
+    }
+}
+
+@media screen and (max-width: 628px) {
+    .post-header .left p{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .post-header .post-userinfo{
+        width: 7rem;
+        padding: 4px 8px;
+        margin-bottom: 10px;
+    }
+
+    .post-header .post-options{
+        position: relative;
+    }
+
+    .post-header .post-options span{
+        position: absolute;
+        right: -15px;
     }
 }

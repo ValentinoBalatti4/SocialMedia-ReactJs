@@ -27,6 +27,9 @@ const User = () => {
   
     const [profilePicOptionsOpen, setProfilePicOptionsOpen] = useState(false);
 
+    const [image, setImage] = useState("");
+    const [imageUrl, setImageUrl] = useState("")
+
     const profileOptionsRef = useRef(null);
 
     const getTimeElapsed = (createdAt) => {
@@ -115,6 +118,34 @@ const User = () => {
         setShowFollowList(true);
     }
 
+    const selectImage = (e) => {
+        setImage(e.target.files[0])
+    
+        // Create a URL for the selected image and set it in the state
+        const imageUrl = URL.createObjectURL(e.target.files[0]);
+        setImageUrl(imageUrl);
+    }
+    
+    const handleCancelImgUpload = () => {
+        setImage("");
+        setImageUrl("");
+    }
+
+    const handleChangeProfilePicture = async () => {
+        try{
+            console.log("Start")
+            const res = await axios.post('http://localhost:4444/users/changeProfilePicture', { image }, { withCredentials: true });
+            console.log(res)
+
+            if(res.status == 200){
+                handleCancelImgUpload();
+                window.location.reload();
+            }
+        }catch(error){
+            console.log(error);
+        }
+    }
+
     return (
     <div className="user-container">
         <Navbar isLogged={isLoggedIn} removeCookie={removeCookie} currentUser={currentUser}/>
@@ -136,11 +167,31 @@ const User = () => {
                             profilePicOptionsOpen && (
                                 <div className='profilePic-options' ref={profileOptionsRef}>
                                     <div className='options'>
-                                        <b>Change profile picture</b>
+                                        <label htmlFor='image-input'>
+                                            <b>Change profile picture</b>
+                                        </label>
+                                        <input
+                                            id='image-input'
+                                            type='file'
+                                            accept='image/*'
+                                            onChange={selectImage}
+                                            style={{display: 'none'}}
+                                        />
                                     </div>
                                     <div className='options'>
                                         <b>Delete profile picture</b>
                                     </div>
+                                </div>
+                            )
+                        }
+                        {
+                            (image) && (
+                                <div className='image-preview-background'>
+                                    <div className='image-preview'>
+                                        <span id='close-btn' className='material-symbols-outlined' onClick={handleCancelImgUpload}>close</span>
+                                        <img src={imageUrl} alt='image-preview'/>
+                                        <span id='submit-btn' onClick={handleChangeProfilePicture}>Submit</span>
+                                    </div>  
                                 </div>
                             )
                         }

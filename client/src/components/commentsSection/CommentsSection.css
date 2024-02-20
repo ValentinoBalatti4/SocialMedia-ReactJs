@@ -24,6 +24,27 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.commentsSection-container .top{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.commentsSection-container .top span{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.commentsSection-container .top span:hover{
+    color: #aa1212;
+    background-color: #ffffff;
+}
+
 .comments-display{
     /* display: flex;
     justify-content: center;
@@ -76,4 +97,10 @@
 .upload-comment-container span:hover{
     background-color: #ddddddc7;
     transform: scale(1.05);
+}
+
+@media screen and (max-width: 728px) {
+    .commentsSection-container{
+        width: 90%;
+    }
 }

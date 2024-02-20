@@ -49,3 +49,16 @@
     -webkit-transform: rotate(360deg);
   }
 }
+
+
+@media screen and (max-width: 768px) {
+  .loader-container{
+    width: 200px;
+    height: 200px;
+  }
+
+  #loading{
+    width: 100px;
+    height: 100px;
+  }
+}

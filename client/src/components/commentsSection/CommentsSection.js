@@ -15,18 +15,19 @@ const CommentsSection = ({
   const commentsSectionRef = useRef(null);
   const [commentText, setCommentText] = useState("")
 
+  const handleOutsideClick = (event) => {
+    if (commentsSectionRef.current && !commentsSectionRef.current.contains(event.target)) {
+      setShowPostsComments(false);
+    }
+  };
+
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (commentsSectionRef.current && !commentsSectionRef.current.contains(event.target)) {
-        setShowPostsComments(false);
-      }
-    };
 
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [setShowPostsComments]);
+  }, [setShowPostsComments, handleOutsideClick]);
 
   const handleUploadComment = async () => {
     try{
@@ -46,7 +47,10 @@ const CommentsSection = ({
   return (
     <div className='background'>
       <div className='commentsSection-container' ref={commentsSectionRef}>
+        <div className='top'>
           <h2>Comments</h2>
+          <span className='material-symbols-outlined' onClick={e => handleOutsideClick(e.target)}>close</span>
+        </div>
           <div className='comments-display'>
             {
               comments.length ===  0 ? <p>There are no comments yet...</p> : (

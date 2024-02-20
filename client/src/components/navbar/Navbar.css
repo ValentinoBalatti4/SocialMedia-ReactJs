@@ -145,6 +145,12 @@ nav{
     text-decoration: none;
 }
 
+@media screen and (max-width: 1120px){
+    .options-container a{
+        font-size: 18px;
+    }
+}
+
 @media screen and (max-width: 782px){
     .options-container{
         display: none

@@ -24,6 +24,7 @@ router.post('/upload', tokenManagment.userLogged, upload.single('image'), async 
 
             imageUrl = await getDownloadURL(snapshot.ref)
         }
+
         const post = new Post({
             username: req.user.username,
             text: req.body.text,
