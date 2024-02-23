@@ -23,3 +23,10 @@ TalkWire Social Blog is a dynamic web application that brings together the power
 🔒 **Secure Authentication:**
    - Firebase ensures secure and reliable user authentication.
    - Protect your account with ease.
+
+## To-do List
+- [ ] Fix change profile picture functionality. (Endpoint)
+
+- [ ] Minor bugs when commenting posts.
+
+- [ ] Allow unregistered users to browse some posts.
