@@ -43,7 +43,7 @@ const FollowList = ({ listType, follows, setFollowing, setShowFollowList, curren
                     follows.map((follow, index) => (
                         <div className='user-container' key={index}>
                             <div className='user-info'>
-                                <a>{follow}</a>
+                                <a href={`/${follow}`}>{follow}</a>
                             </div>
                             {
                                 follow !== currentUser && (
