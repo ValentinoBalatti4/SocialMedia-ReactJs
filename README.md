@@ -1,4 +1,4 @@
-# SuperAwesome Social Blog
+# TalkWire Social Blog
 
 Welcome to **TalkWire**, where inspiration meets connection in the digital realm!
 
