@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import "./Navbar.css"
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import logoImage from '../../assets/main-logo-white-transparent.png';
 
 const Navbar = ({ isLogged, removeCookie, currentUser }) => {
     const [input, setInput] = useState("");
@@ -59,6 +59,7 @@ const Navbar = ({ isLogged, removeCookie, currentUser }) => {
     <nav>
         <div className="wrapper">
             <div className='logo-container'>
+                <img src={logoImage}/>
                 <a href="/">TalkWire</a>
             </div>
             <div className={`search-container ${showSearchBar && 'active'}`}>
