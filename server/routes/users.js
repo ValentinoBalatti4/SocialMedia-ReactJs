@@ -9,12 +9,10 @@ const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = require('
 const { initializeApp } = require('firebase/app')
 const config = require('../config/firebase.config.js')
 
-
 initializeApp(config)
 const storage = getStorage()
 
 const upload = multer({ storage: multer.memoryStorage() })
-
 
 router.get('/discover', tokenManagment.userLogged, async (req, res) => {
     try{

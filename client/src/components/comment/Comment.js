@@ -24,15 +24,12 @@ function Comment({ postId, comment, setComments, getTimeElapsed, currentUser }) 
 
             if(res.status === 200){
                 const updatedComments = res.data.comments;
-                setComments(updatedComments);
+                await setComments(updatedComments);
             }
-
-
         }catch(error){
             console.log(error);
         }
     }
-
 
   return (
     <div className='comment-container'>

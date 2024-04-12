@@ -98,18 +98,7 @@ const Home = () => {
       }
     }
     getPosts()
-  }, [setPosts])
-
-  const handleOutsideClick = (event) => {
-    if (showPostsComments) {
-      const commentsSection = document.querySelector(".commentsSection-container");
-
-      if (commentsSection && !commentsSection.contains(event.target)) {
-        setShowPostsComments(false);
-        setSelectedPost(null);
-      }
-    }
-  };
+  }, [setPosts]) 
 
   const showComments = async (post) => {
       setSelectedPost(post);

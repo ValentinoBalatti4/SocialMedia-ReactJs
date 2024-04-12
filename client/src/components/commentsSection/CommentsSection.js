@@ -4,7 +4,7 @@ import axios from 'axios';
 import Comment from '../comment/Comment';
 
 const CommentsSection = ({ 
-    comments, 
+    comments,
     setComments,
     setShowPostsComments,
     postId,
@@ -15,8 +15,9 @@ const CommentsSection = ({
   const commentsSectionRef = useRef(null);
   const [commentText, setCommentText] = useState("")
 
-  const handleOutsideClick = (event) => {
+  const handleOutsideClick = async (event) => {
     if (commentsSectionRef.current && !commentsSectionRef.current.contains(event.target)) {
+      await 
       setShowPostsComments(false);
     }
   };
@@ -37,7 +38,7 @@ const CommentsSection = ({
       );
 
       const updatedComments = res.data.comments;
-      setComments(updatedComments);
+      await setComments(updatedComments);
       setCommentText("");
     }catch(error){
       console.log(error);
